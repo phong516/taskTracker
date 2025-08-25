@@ -1,5 +1,10 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Isrc -Isrc/model -Isrc/view -Isrc/controller -Isrc/misc
+CXXFLAGS = -std=c++17 -Wall -Werror -Weffc++ -Wextra -Wconversion -Wsign-conversion -pedantic-errors -Isrc -Isrc/model -Isrc/view -Isrc/controller -Isrc/misc
+ifdef DEBUG
+	CXXFLAGS += -ggdb
+else
+	CXXFLAGS += -O2 -DNDEBUG
+endif
 
 SRC = $(shell find src -name '*.cpp')
 OBJ = $(SRC:.cpp=.o)

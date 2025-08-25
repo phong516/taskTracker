@@ -2,5 +2,7 @@
 
 void commandHandler::cli(int argc, char * argv[])
 {
-    std::printf("Command Line Interface invoked with %d arguments.\n", argc);
+    for (int i = 0; i < argc; ++i) {
+        std::printf("Argument %d: %s\n", i, argv[i]);
+    }
 }
