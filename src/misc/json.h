@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 
-class json
+class Json
 {
-    public:
-        json(std::string string);
+public:
+    Json(std::string string);
 };

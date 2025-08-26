@@ -11,9 +11,9 @@ enum taskStatus
 
 struct Task
 {
-    std::string id;
-    std::string description;
-    std::string status;
-    std::time_t createdAt;
-    std::time_t updatedAt;
+    std::string id{};
+    std::string description{};
+    std::string status{};
+    std::time_t createdAt{};
+    std::time_t updatedAt{};
 };

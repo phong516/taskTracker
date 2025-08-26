@@ -3,11 +3,11 @@
 #include "commandhandler.h"
 #include "json.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	std::printf("Task Tracker!!!\n");
-	taskView view;
-	taskManager model;
+	taskView view{};
+	taskManager model{};
 	commandHandler controller(model, view);
 	controller.cli(argc, argv);
 	std::ifstream file{"task.json"};
@@ -19,9 +19,8 @@ int main(int argc, char * argv[])
 	std::string strInput{};
 	while (file >> strInput)
 	{
-	std::cout << strInput;
+		std::cout << strInput;
 	}
 
 	return 0;
 }
-

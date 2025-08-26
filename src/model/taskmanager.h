@@ -3,6 +3,6 @@
 
 class taskManager
 {
-    public:
-        taskManager(void){}
+public:
+    taskManager(void) {}
 };

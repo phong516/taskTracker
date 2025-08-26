@@ -1,6 +1,6 @@
 #include "json.h"
 
-json::json(std::string string)
+Json::Json(std::string string)
 {
     std::cout << string << std::endl;
 }
