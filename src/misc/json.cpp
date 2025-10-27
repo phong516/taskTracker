@@ -36,14 +36,85 @@ jsonValue json::parseStr(const std::string & text)
     return jsonValue(text);
 }
 
-void json::parse(const std::string & text)
+bool json::parse(const std::string & text)
 {
+    if (isValid(text) == false)
+    {
+        std::cout << "json is invalid\n";
+        return false;
+    }
     for (char c : text)
     {
-        if (c == '\n')
+        if (c == '\n' || c == ' ')
         {
             continue;
         }
         //TODO continue ' ' but it maybe also inside a string
+        if (c == '{')
+        {
+
+        }
     }
+}
+
+bool json::isValid(const std::string & text)
+{
+    std::stack<char> bracketStack {};
+
+    for (char c : text)
+    {
+        if (c == '{' || c == '[')
+        {
+            bracketStack.push(c);
+        }
+        if (c == '}' || c == ']')
+        {
+            if (bracketStack.empty() == true)
+            {
+                return false;
+            }
+            // if top is '[', bracket[c] would be ']'
+            if (bracketStack.top() == brackets[c])
+            {
+                bracketStack.pop();
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return bracketStack.empty();
+}
+
+std::string::iterator json::findClosedBracket(std::string & text, char bracket, std::string::iterator begin, std::string::iterator end)
+{
+    std::string::iterator closedBracketIte {};
+    std::stack<char> bracketStack {};
+    for (std::string::iterator it = begin; it != end; it++)
+    {
+        char c = *it;
+        if (c == '{' || c == '[')
+        {
+            bracketStack.push(c);
+        }
+        if (c == '}' || c == ']')
+        {
+            // if top is '[', bracket[c] would be ']'
+            if (bracketStack.top() == brackets[c])
+            {
+                bracketStack.pop();
+                if (bracketStack.empty() == true)
+                {
+                    closedBracketIte = it;
+                }
+            }
+        }
+    }
+    return closedBracketIte;
+}
+
+void handleObject(const std::string & text, std::string::iterator begin, std::string::iterator end)
+{
+    
 }
