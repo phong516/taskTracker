@@ -43,16 +43,19 @@ bool json::parse(const std::string & text)
         std::cout << "json is invalid\n";
         return false;
     }
-    for (char c : text)
+    for (std::string::const_iterator it = text.begin(); it != text.end(); it++)
     {
+        char c = *it;
         if (c == '\n' || c == ' ')
         {
             continue;
         }
         //TODO continue ' ' but it maybe also inside a string
-        if (c == '{')
+        if (c == '{' || c == '[')
         {
-
+            std::string::const_iterator blockEnd = findClosedBracket(text, c, it, text.end());
+            handle(text, c, it, blockEnd);
+            it = blockEnd;
         }
     }
 }
@@ -87,11 +90,11 @@ bool json::isValid(const std::string & text)
     return bracketStack.empty();
 }
 
-std::string::iterator json::findClosedBracket(std::string & text, char bracket, std::string::iterator begin, std::string::iterator end)
+std::string::const_iterator json::findClosedBracket(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end)
 {
-    std::string::iterator closedBracketIte {};
+    std::string::const_iterator closedBracketIte {};
     std::stack<char> bracketStack {};
-    for (std::string::iterator it = begin; it != end; it++)
+    for (std::string::const_iterator it = begin; it != end; it++)
     {
         char c = *it;
         if (c == '{' || c == '[')
@@ -114,7 +117,28 @@ std::string::iterator json::findClosedBracket(std::string & text, char bracket, 
     return closedBracketIte;
 }
 
-void handleObject(const std::string & text, std::string::iterator begin, std::string::iterator end)
+void json::handle(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end)
+{
+    switch (bracket)
+    {
+        case '{':
+            handleObject(text, begin, end);
+            return;
+        case '[':
+            handleArray(text, begin, end);
+            return;
+        default:
+            return;
+    }
+}
+
+
+void json::handleObject(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end)
 {
     
+}
+
+void json::handleArray(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end)
+{
+
 }

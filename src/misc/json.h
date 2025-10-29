@@ -32,6 +32,7 @@
             {
                 return (*obj)[key];
             }
+            throw std::runtime_error("Not jsonObject");
         }
 
         const jsonValue & operator[](const std::string & key) const
@@ -40,6 +41,7 @@
             {
                 return obj->at(key);
             }
+            throw std::runtime_error("Not jsonObject");
         }
 
         jsonValue & operator[](size_t index)
@@ -48,6 +50,7 @@
             {
                 return array->at(index);
             }
+            throw std::runtime_error("Not jsonArray");
         }
 
         const jsonValue & operator[](size_t index) const
@@ -56,6 +59,7 @@
             {
                 return array->at(index);
             }
+            throw std::runtime_error("Not jsonArray");
         }
     };
 
@@ -86,6 +90,8 @@ class json
         jsonValue parseStr(const std::string & text);
         bool parse(const std::string & text);
         bool isValid(const std::string & text);
-        std::string::iterator findClosedBracket(std::string & text, char bracket, std::string::iterator begin, std::string::iterator end);
-
+        std::string::const_iterator findClosedBracket(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end);
+        void handle(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end);
+        void handleObject(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end);
+        void handleArray(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end);
 };
