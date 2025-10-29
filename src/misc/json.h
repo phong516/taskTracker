@@ -26,6 +26,37 @@
         template<typename T> 
         jsonValue(T v) : value(std::move(v)) {}
         //TODO add operator [] for array index
+        jsonValue & operator[](const std::string & key)
+        {
+            if (auto * obj = std::get_if<jsonObject>(&value))
+            {
+                return (*obj)[key];
+            }
+        }
+
+        const jsonValue & operator[](const std::string & key) const
+        {
+            if (const auto * obj = std::get_if<jsonObject>(&value))
+            {
+                return obj->at(key);
+            }
+        }
+
+        jsonValue & operator[](size_t index)
+        {
+            if (auto * array = std::get_if<jsonArray>(&value))
+            {
+                return array->at(index);
+            }
+        }
+
+        const jsonValue & operator[](size_t index) const
+        {
+            if (auto * array = std::get_if<jsonArray>(&value))
+            {
+                return array->at(index);
+            }
+        }
     };
 
 std::map<char, char> brackets = 
@@ -40,6 +71,14 @@ class json
         json(const std::string jsonStr): parsedJson(std::move(jsonStr)) {}
         json(const std::string & filePath);
         //TODO add operator [] for object key
+        jsonValue & operator[](const std::string & key)
+        {
+            return rootJson[key];
+        }
+        jsonValue & operator[](size_t index)
+        {
+            return rootJson[index];
+        }
     private:
         jsonValue rootJson {};
         std::string parsedJson;
