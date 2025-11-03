@@ -4,6 +4,7 @@
 #include <variant>
 #include <vector>
 #include <stack>
+#include <algorithm>
 
     struct jsonValue;
 
@@ -72,9 +73,7 @@ std::map<char, char> brackets =
 class json
 {
     public:
-        json(const std::string jsonStr): parsedJson(std::move(jsonStr)) {}
         json(const std::string & filePath);
-        //TODO add operator [] for object key
         jsonValue & operator[](const std::string & key)
         {
             return rootJson[key];
@@ -85,12 +84,13 @@ class json
         }
     private:
         jsonValue rootJson {};
-        std::string parsedJson;
-        jsonValue parseNum(const std::string & text, std::string::iterator start, std::string::iterator end);
+        std::string parsedJson {};
+        void rawJson(std::string & text);
+        jsonValue parseNum(const std::string & text, std::size_t start, std::size_t end);
         jsonValue parseStr(const std::string & text);
         bool parse(const std::string & text);
         bool isValid(const std::string & text);
-        std::string::const_iterator findClosedBracket(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end);
+        std::string::const_iterator findClosedBracket(char bracket, std::string::const_iterator begin, std::string::const_iterator end);
         void handle(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end);
         void handleObject(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end);
         void handleArray(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end);
