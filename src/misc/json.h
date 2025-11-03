@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -6,68 +8,63 @@
 #include <stack>
 #include <algorithm>
 
-    struct jsonValue;
+struct jsonValue;
 
-    using jsonArray = std::vector<jsonValue>;
-    using jsonObject = std::map<std::string, jsonValue>;
+using jsonArray = std::vector<jsonValue>;
+using jsonObject = std::map<std::string, jsonValue>;
 
-    struct jsonValue
-    {
-        using valueType = std::variant<
-            std::nullptr_t,
-            bool,
-            double,
-            std::string,
-            jsonArray,
-            jsonObject
-        >;
-        valueType value;
-        jsonValue() : value(nullptr) {}
-
-        template<typename T> 
-        jsonValue(T v) : value(std::move(v)) {}
-        //TODO add operator [] for array index
-        jsonValue & operator[](const std::string & key)
-        {
-            if (auto * obj = std::get_if<jsonObject>(&value))
-            {
-                return (*obj)[key];
-            }
-            throw std::runtime_error("Not jsonObject");
-        }
-
-        const jsonValue & operator[](const std::string & key) const
-        {
-            if (const auto * obj = std::get_if<jsonObject>(&value))
-            {
-                return obj->at(key);
-            }
-            throw std::runtime_error("Not jsonObject");
-        }
-
-        jsonValue & operator[](size_t index)
-        {
-            if (auto * array = std::get_if<jsonArray>(&value))
-            {
-                return array->at(index);
-            }
-            throw std::runtime_error("Not jsonArray");
-        }
-
-        const jsonValue & operator[](size_t index) const
-        {
-            if (auto * array = std::get_if<jsonArray>(&value))
-            {
-                return array->at(index);
-            }
-            throw std::runtime_error("Not jsonArray");
-        }
-    };
-
-std::map<char, char> brackets = 
+struct jsonValue
 {
-    {']', '['},
-    {'}', '{'}
+    using valueType = std::variant<
+        std::nullptr_t,
+        bool,
+        int,
+        double,
+        std::string,
+        jsonArray,
+        jsonObject
+    >;
+    valueType value;
+    jsonValue() : value(nullptr) {}
+
+    template<typename T> 
+    jsonValue(T v) : value(std::move(v)) {}
+    //TODO add operator [] for array index
+    jsonValue & operator[](const std::string & key)
+    {
+        if (auto * obj = std::get_if<jsonObject>(&value))
+        {
+            return (*obj)[key];
+        }
+        throw std::runtime_error("Not jsonObject");
+    }
+
+    const jsonValue & operator[](const std::string & key) const
+    {
+        if (const auto * obj = std::get_if<jsonObject>(&value))
+        {
+            return obj->at(key);
+        }
+        throw std::runtime_error("Not jsonObject");
+    }
+
+    jsonValue & operator[](size_t index)
+    {
+        if (auto * array = std::get_if<jsonArray>(&value))
+        {
+            return array->at(index);
+        }
+        throw std::runtime_error("Not jsonArray");
+    }
+
+    const jsonValue & operator[](size_t index) const
+    {
+        if (auto * array = std::get_if<jsonArray>(&value))
+        {
+            return array->at(index);
+        }
+        throw std::runtime_error("Not jsonArray");
+    }
 };
 
 class json

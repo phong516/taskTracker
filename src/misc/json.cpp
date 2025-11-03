@@ -1,5 +1,11 @@
 #include "json.h"
 
+std::map<char, char> brackets = 
+{
+    {']', '['},
+    {'}', '{'}
+};
+
 json::json(const std::string & filePath)
 {
     std::ifstream file(filePath);
