@@ -16,6 +16,10 @@ json::json(const std::string & filePath)
        parsedJson.append(line); 
     }
     rawJson(parsedJson);
+    if (*parsedJson.begin() != '{' && *parsedJson.end() != '}')
+    {
+        std::runtime_error("Invalid json begin and end!!!");
+    }
 }
 
 jsonValue json::parseNum(const std::string & text, std::size_t start, std::size_t end)
@@ -39,8 +43,7 @@ jsonValue json::parseStr(const std::string & text)
 
 bool json::parse(const std::string & text)
 {
-    bool keyDetected = false;
-    std::string key {};
+    bool isParsing, keyDetected {false};
     if (isValid(text) == false)
     {
         std::cout << "json is invalid\n";
@@ -49,7 +52,11 @@ bool json::parse(const std::string & text)
     for (std::string::const_iterator it = text.begin(); it != text.end(); it++)
     {
         char c = *it;
-        // key
+
+        if (it == text.begin() == '{' || it == text.end() == '}')
+        {
+            continue;
+        }
         if (c == '"' && !keyDetected)
         {
             std::string::const_iterator blockEnd = findClosedBracket(c, it, text.end());
@@ -58,14 +65,16 @@ bool json::parse(const std::string & text)
                 throw std::runtime_error("Invalid Key with \' \'");
                 return false;
             }
-
-
         }
-        //TODO continue ' ' but it maybe also inside a string
+
         if (c == '{' || c == '[')
         {
             std::string::const_iterator blockEnd = findClosedBracket(c, it, text.end());
-            handle(text, c, it, blockEnd);
+            if (!handle(c, it, blockEnd))
+            {
+                std::runtime_error("json error!!!");
+                return false;
+            }
             it = blockEnd;
         }
     }
@@ -74,6 +83,11 @@ bool json::parse(const std::string & text)
 
 bool json::isValid(const std::string & text)
 {
+    if (*text.begin() != '{' && *text.end() != '}')
+    {
+        std::runtime_error("Invalid json begin and end!!!");
+        return false;
+    }
     std::stack<char> bracketStack {};
 
     for (char c : text)
@@ -95,6 +109,7 @@ bool json::isValid(const std::string & text)
             }
             else
             {
+                std::cout << "Parenthesis not balanced!!!";
                 return false;
             }
         }
@@ -135,34 +150,32 @@ std::string::const_iterator json::findClosedBracket(char bracket, std::string::c
     return closedBracketIte;
 }
 
-void json::handle(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end)
+bool json::handle(char bracket, std::string::const_iterator begin, std::string::const_iterator end)
 {
     switch (bracket)
     {
         case '{':
-            handleObject(text, begin, end);
-            return;
+            return handleObject(begin, end);
         case '[':
-            handleArray(text, begin, end);
-            return;
+            return handleArray(begin, end);
         default:
-            return;
+            return false;
     }
 }
 
 
-void json::handleObject(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end)
+bool json::handleObject(std::string::const_iterator begin, std::string::const_iterator end)
 {
-    [[maybe_unused]] auto _text = text;
     [[maybe_unused]] auto _begin = begin;
     [[maybe_unused]] auto _end   = end;
+    return true;
 }
 
-void json::handleArray(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end)
+bool json::handleArray(std::string::const_iterator begin, std::string::const_iterator end)
 {
-    [[maybe_unused]] auto _text = text;
     [[maybe_unused]] auto _begin = begin;
     [[maybe_unused]] auto _end   = end;
+    return true;
 }
 
 void json::rawJson(std::string & text)

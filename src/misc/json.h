@@ -88,7 +88,7 @@ class json
         bool parse(const std::string & text);
         bool isValid(const std::string & text);
         std::string::const_iterator findClosedBracket(char bracket, std::string::const_iterator begin, std::string::const_iterator end);
-        void handle(const std::string & text, char bracket, std::string::const_iterator begin, std::string::const_iterator end);
-        void handleObject(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end);
-        void handleArray(const std::string & text, std::string::const_iterator begin, std::string::const_iterator end);
+        bool handle(char bracket, std::string::const_iterator begin, std::string::const_iterator end);
+        bool handleObject(std::string::const_iterator begin, std::string::const_iterator end);
+        bool handleArray(std::string::const_iterator begin, std::string::const_iterator end);
 };
