@@ -84,11 +84,10 @@ class json
         std::string parsedJson {};
         void rawJson(std::string & text);
         jsonValue parseNum(const std::string & text, std::size_t start, std::size_t end);
-        jsonValue parseStr(const std::string & text);
-        bool parse(const std::string & text);
+        std::string parseStr(std::string::const_iterator begin, std::string::const_iterator end);
+        jsonValue parse(std::string::const_iterator begin, std::string::const_iterator end);
+        jsonValue parseObject(std::string::const_iterator begin, std::string::const_iterator end);
+        jsonValue parseArray(std::string::const_iterator begin, std::string::const_iterator end);
         bool isValid(const std::string & text);
-        std::string::const_iterator findClosedBracket(char bracket, std::string::const_iterator begin, std::string::const_iterator end);
-        bool handle(char bracket, std::string::const_iterator begin, std::string::const_iterator end);
-        bool handleObject(std::string::const_iterator begin, std::string::const_iterator end);
-        bool handleArray(std::string::const_iterator begin, std::string::const_iterator end);
+        std::string::const_iterator findClosingBracket(char bracket, std::string::const_iterator begin, std::string::const_iterator end);
 };

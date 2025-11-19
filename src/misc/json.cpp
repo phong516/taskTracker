@@ -20,6 +20,11 @@ json::json(const std::string & filePath)
     {
         std::runtime_error("Invalid json begin and end!!!");
     }
+    if (!isValid(parsedJson))
+    {
+        std::runtime_error("Invalid json!!!");
+        exit(EXIT_FAILURE);
+    }
 }
 
 jsonValue json::parseNum(const std::string & text, std::size_t start, std::size_t end)
@@ -36,49 +41,62 @@ jsonValue json::parseNum(const std::string & text, std::size_t start, std::size_
     }
 }
 
-jsonValue json::parseStr(const std::string & text)
+std::string parseStr(std::string::const_iterator begin, std::string::const_iterator end)
 {
-    return jsonValue(text);
+    return std::string(begin + 1, end - 1);
 }
 
-bool json::parse(const std::string & text)
+jsonValue json::parse(std::string::const_iterator begin, std::string::const_iterator end)
 {
-    bool isParsing, keyDetected {false};
-    if (isValid(text) == false)
-    {
-        std::cout << "json is invalid\n";
-        return false;
-    }
-    for (std::string::const_iterator it = text.begin(); it != text.end(); it++)
+    jsonValue jsonVar {};
+    for (std::string::const_iterator it = begin; it != end; it++)
     {
         char c = *it;
 
-        if (it == text.begin() == '{' || it == text.end() == '}')
+        if ((it == begin && *begin == '{') || (it == begin && *begin == '['))
         {
             continue;
         }
-        if (c == '"' && !keyDetected)
+        if (c == '"')
         {
-            std::string::const_iterator blockEnd = findClosedBracket(c, it, text.end());
-            if (std::find(it, blockEnd, ' ') == blockEnd)
+            std::string::const_iterator blockEnd = findClosingBracket(c, it, end);
+            std::string key = parseStr(it, blockEnd);
+            //if ':' behind double "" -> key - value pair
+            // this is a key, not normal string value
+            if (*(blockEnd + 1) == ':')
             {
-                throw std::runtime_error("Invalid Key with \' \'");
-                return false;
+                // space in key name -> invalid
+                if (std::find(it, blockEnd, ' ') == blockEnd)
+                {
+                    throw std::runtime_error("Invalid Key name with space");
+                }
+                if (c == '{' || c == '[')
+                {
+                    std::string::const_iterator blockEnd = findClosingBracket(c, it, end);
+                    if (c == '{')
+                    {
+                        jsonVar[key] = parseObject(it, blockEnd);
+                    }
+                    if (c == '[')
+                    {
+                        jsonVar[key] = parseArray(it, blockEnd);
+                    }
+                    it = blockEnd;
+                    continue;
+                }
+                else
+                {
+                    std::string::const_iterator endValue {};
+                }
+            }
+            else
+            {
+                std::runtime_error("This should be a key!!!");
             }
         }
 
-        if (c == '{' || c == '[')
-        {
-            std::string::const_iterator blockEnd = findClosedBracket(c, it, text.end());
-            if (!handle(c, it, blockEnd))
-            {
-                std::runtime_error("json error!!!");
-                return false;
-            }
-            it = blockEnd;
-        }
     }
-    return true;
+    return jsonVar;
 }
 
 bool json::isValid(const std::string & text)
@@ -117,7 +135,7 @@ bool json::isValid(const std::string & text)
     return bracketStack.empty();
 }
 
-std::string::const_iterator json::findClosedBracket(char bracket, std::string::const_iterator begin, std::string::const_iterator end)
+std::string::const_iterator json::findClosingBracket(char bracket, std::string::const_iterator begin, std::string::const_iterator end)
 {
     if (bracket != *begin)
     {
@@ -150,28 +168,15 @@ std::string::const_iterator json::findClosedBracket(char bracket, std::string::c
     return closedBracketIte;
 }
 
-bool json::handle(char bracket, std::string::const_iterator begin, std::string::const_iterator end)
+jsonValue json::parseObject(std::string::const_iterator begin, std::string::const_iterator end)
 {
-    switch (bracket)
-    {
-        case '{':
-            return handleObject(begin, end);
-        case '[':
-            return handleArray(begin, end);
-        default:
-            return false;
-    }
-}
-
-
-bool json::handleObject(std::string::const_iterator begin, std::string::const_iterator end)
-{
+    jsonValue jsonVar {};
     [[maybe_unused]] auto _begin = begin;
     [[maybe_unused]] auto _end   = end;
-    return true;
+    return jsonVar;
 }
 
-bool json::handleArray(std::string::const_iterator begin, std::string::const_iterator end)
+jsonValue json::parseArray(std::string::const_iterator begin, std::string::const_iterator end)
 {
     [[maybe_unused]] auto _begin = begin;
     [[maybe_unused]] auto _end   = end;
