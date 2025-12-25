@@ -41,7 +41,7 @@ jsonValue json::parseNum(const std::string & text, std::size_t start, std::size_
     }
 }
 
-std::string parseStr(std::string::const_iterator begin, std::string::const_iterator end)
+std::string json::parseStr(std::string::const_iterator begin, std::string::const_iterator end)
 {
     return std::string(begin + 1, end - 1);
 }
