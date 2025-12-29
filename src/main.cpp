@@ -1,6 +1,6 @@
-#include "taskmanager.h"
-#include "taskview.h"
-#include "commandhandler.h"
+#include "model/taskmanager.h"
+#include "view/taskview.h"
+#include "controller/commandhandler.h"
 //#include "json.h"
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;

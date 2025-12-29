@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "task.h"
-#include "taskview.h"
-#include "taskmanager.h"
+#include "model/task.h"
+#include "view/taskview.h"
+#include "model/taskmanager.h"
 
 class commandHandler
 {
