@@ -1,7 +1,9 @@
 #include "taskmanager.h"
 #include "taskview.h"
 #include "commandhandler.h"
-#include "json.h"
+//#include "json.h"
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
 
 int main(int argc, char *argv[])
 {
@@ -10,17 +12,6 @@ int main(int argc, char *argv[])
 	taskManager model{};
 	commandHandler controller(model, view);
 	controller.cli(argc, argv);
-	std::ifstream file{"task.json"};
-	if (!file)
-	{
-		std::cout << "File error\n";
-		return 1;
-	}
-	std::string strInput{};
-	while (file >> strInput)
-	{
-		std::cout << strInput;
-	}
-
+	json a {};
 	return 0;
 }
