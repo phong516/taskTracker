@@ -1,7 +1,13 @@
 {
-    "tasks": {
-        "1": {"desc": "do homework", "status": "in-progress"},
-        "2": {"desc": "clean room", "status": "not-started"}
+  "next_id": 4,
+  "tasks": {
+    "1": {
+      "desc": "remove the trash bin",
+      "status": "in-progress"
     },
-    "next_id": 3
+    "2": {
+      "desc": "description 2",
+      "status": "done"
+    }
+  }
 }

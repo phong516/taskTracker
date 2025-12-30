@@ -14,7 +14,9 @@ int main(int argc, char *argv[])
 	storage db;
 	db.init();
 	db.add("clean the house");
-	db.update("1", "remove the trash bin");
+	db.update("1", "desc", "remove the trash bin");
+	db.update("2", "status", "done");
+	db.remove("3");
 	db.save();
 	return 0;
 }

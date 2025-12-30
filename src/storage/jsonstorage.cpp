@@ -75,25 +75,27 @@ bool storage::checkFile(T& file) const
     return true;
 }
 
-bool storage::update(const std::string& id, const std::string& desc)
+bool storage::update(const std::string& id, const std::string& field, const std::string& content)
 {
-    if (p_json["tasks"].contains(id))
-    {
-        p_json["tasks"][id] = desc;
-    }
-    else
+    if (!p_json["tasks"].contains(id))
     {
         std::cerr << "ID " + id << " not exists\n";
         return false;
     }
+    p_json["tasks"][id][field] = content;
     return true;
 }
 
 bool storage::add(const std::string& desc)
 {
     int nextID = p_json["next_id"];
-    p_json["tasks"][std::to_string(nextID)] = desc;
-    p_json["next_id"] += 1;
+    json newJson {
+    {
+        {"desc", desc},
+        {"status", "in-progress"}
+    }};
+    p_json["tasks"][std::to_string(nextID)] = newJson;
+    p_json["next_id"] = ++nextID;
     return true;
 }
 
@@ -103,8 +105,12 @@ bool storage::remove(const std::string& id)
     return true;
 }
 
-std::vector<std::string> storage::list(void) const
+std::vector<json> storage::list(void) const
 {
-    std::vector<std::string> taskList {};
+    std::vector<json> taskList {};
+    for (auto task: p_json["tasks"])
+    {
+        taskList.push_back(task);
+    }
     return taskList;
 }
