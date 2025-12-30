@@ -1,5 +1,6 @@
 #include "jsonstorage.h"
 #include <filesystem>
+#include <string>
 
 json storage::load(void) const
 {
@@ -72,4 +73,38 @@ bool storage::checkFile(T& file) const
         return false;
     }
     return true;
+}
+
+bool storage::update(const std::string& id, const std::string& desc)
+{
+    if (p_json["tasks"].contains(id))
+    {
+        p_json["tasks"][id] = desc;
+    }
+    else
+    {
+        std::cerr << "ID " + id << " not exists\n";
+        return false;
+    }
+    return true;
+}
+
+bool storage::add(const std::string& desc)
+{
+    int nextID = p_json["next_id"];
+    p_json["tasks"][std::to_string(nextID)] = desc;
+    p_json["next_id"] += 1;
+    return true;
+}
+
+bool storage::remove(const std::string& id)
+{
+    p_json["tasks"].erase(id);
+    return true;
+}
+
+std::vector<std::string> storage::list(void) const
+{
+    std::vector<std::string> taskList {};
+    return taskList;
 }

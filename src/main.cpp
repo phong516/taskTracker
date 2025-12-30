@@ -13,5 +13,8 @@ int main(int argc, char *argv[])
 	controller.cli(argc, argv);
 	storage db;
 	db.init();
+	db.add("clean the house");
+	db.update("1", "remove the trash bin");
+	db.save();
 	return 0;
 }
