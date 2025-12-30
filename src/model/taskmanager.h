@@ -1,9 +1,10 @@
 #pragma once
-
-#include <iostream>
-
+#include "storage/jsonstorage.h"
 class taskManager
 {
-public:
-    taskManager(void) {}
-};
+    private:
+        
+    public:
+        taskManager(void) {}
+        bool load(json inputJson);
+        bool save(json outputJson);
