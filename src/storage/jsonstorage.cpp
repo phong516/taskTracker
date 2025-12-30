@@ -5,7 +5,11 @@
 json storage::load(void) const
 {
     std::ifstream file(p_filepath, std::ios::in); 
-    checkFile(file);
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open " << p_filepath;
+        return json {};
+    }
     if (!json::accept(file))
     {
         throw std::runtime_error("json file is invalid " + p_filepath);
@@ -24,7 +28,11 @@ json storage::load(void) const
 bool storage::save(void)
 {
     std::ofstream file(p_filepath, std::ios::trunc);
-    checkFile(file);
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open " << p_filepath;
+        return false;
+    }
     file << p_json.dump(DEFAULT_INDENT);
     file.close();
     return true;
@@ -44,7 +52,7 @@ bool storage::init(void)
     }
     else
     {
-        load();
+        p_json = load();;
     }
     return true;
 }
@@ -58,18 +66,6 @@ bool storage::createDir(void)
     catch (std::filesystem::filesystem_error const& ex)
     {
         throw std::runtime_error(ex.what());
-        return false;
-    }
-    return true;
-}
-
-
-template <typename T>
-bool storage::checkFile(T& file) const
-{
-    if (!file.is_open())
-    {
-        throw std::runtime_error("Failed to open " + p_filepath);
         return false;
     }
     return true;

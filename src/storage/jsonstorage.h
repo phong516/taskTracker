@@ -22,9 +22,6 @@ class storage
         bool exists(void) const;
         bool createDir(void);
 
-        template <typename T>
-        bool checkFile(T& file) const;
-
     public:
         explicit storage(const std::string& filepath = DEFAULT_FILEPATH): p_filepath(filepath) {};
         json load(void) const;
