@@ -8,3 +8,4 @@ class taskManager
         taskManager(void) {}
         bool load(json inputJson);
         bool save(json outputJson);
+};
