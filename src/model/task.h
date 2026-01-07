@@ -3,18 +3,11 @@
 #include <iostream>
 #include <ctime>
 
-enum taskStatus
-{
-    TODO,
-    IN_PROGRESS,
-    DONE,
-};
-
 struct Task
 {
-    std::string id{};
+    int id{};
     std::string description{};
-    std::string status{};
-    std::time_t createdAt{};
-    std::time_t updatedAt{};
+    std::string status{"in-progress"};
+    std::time_t createdAt{std::time(nullptr)};
+    std::time_t updatedAt{std::time(nullptr)};
 };
