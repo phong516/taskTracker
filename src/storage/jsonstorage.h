@@ -26,6 +26,7 @@ class storage
         explicit storage(const std::string& filepath = DEFAULT_FILEPATH): p_filepath(filepath) {};
         json load(void) const;
         bool save(void);
+        bool save(json input);
         bool init(void);
         bool update(const std::string& id, const std::string& field, const std::string& content);
         bool add(const std::string& desc);

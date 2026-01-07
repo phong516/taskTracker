@@ -38,6 +38,19 @@ bool storage::save(void)
     return true;
 }
 
+bool storage::save(json input)
+{
+    std::ofstream file(p_filepath, std::ios::trunc);
+    if (!file.is_open())
+    {
+        std::cerr << "Failed to open " << p_filepath << std::endl;
+        return false;
+    }
+    file << input.dump();
+    file.close();
+    return true;
+}
+
 bool storage::exists(void) const
 {
     return std::filesystem::exists(p_filepath);
@@ -49,10 +62,6 @@ bool storage::init(void)
     {
         createDir();
         save();
-    }
-    else
-    {
-        p_json = load();;
     }
     return true;
 }
