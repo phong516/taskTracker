@@ -86,17 +86,11 @@ bool taskManager::update_task(int id, const Task& task)
     return true;
 }
 
-std::vector<Task> taskManager::list_task(const std::string& status_filter)
+std::vector<Task> taskManager::list_task(void)
 {
     std::vector<Task> tasks {};
     for (const auto& [id, task]: p_tasks)
     {
-        if (!status_filter.empty() && status_filter == task.status)
-        {
-            tasks.push_back(task);
-            std::cout << task.id << std::endl;
-            continue;
-        }
         tasks.push_back(task);
     }
     return tasks;

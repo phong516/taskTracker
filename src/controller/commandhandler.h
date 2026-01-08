@@ -19,6 +19,7 @@ private:
     std::vector<std::string> parse_args(int argc, char* argv[]);
     std::string get_option_value(const std::vector<std::string>& args, const std::string& option) const;
     bool has_option(const std::vector<std::string>& args, const std::string& option) const;
+    std::vector<Task> filter_status(const std::vector<Task>& tasks, const std::string& value);
 
 public:
     explicit commandHandler(const std::string& db_path = "data/task.json");

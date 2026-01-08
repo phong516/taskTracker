@@ -22,23 +22,29 @@ void commandHandler::handle_add(const std::vector<std::string>& args)
 }
 void commandHandler::handle_list(const std::vector<std::string>& args)
 {
-    if (args.empty())
+    std::vector<Task> tasks {p_manager.list_task()};
+    if (!args.empty())
     {
-         p_manager.list_task();
-         return;
-    } 
-    if (args.size() != 1)
-    {
-         std::cerr << "list filter requires 1 argument \n";
-         std::cout << "`tasktracker help` for usage\n";
-         return;
+        tasks = filter_status(tasks, args[0]);
     }
-    std::vector<Task> tasks {p_manager.list_task(args[0])};
     for (Task task: tasks)
     {
         std::cout << "#" << task.id << " - " << task.status << ": " << task.description << std::endl;
     }
     return;
+}
+
+std::vector<Task> commandHandler::filter_status(const std::vector<Task>& tasks, const std::string& value)
+{
+    std::vector<Task> filtered {};
+    for (const auto& task: tasks)
+    {
+        if (task.status == value)
+        {
+            filtered.push_back(task);
+        }
+    }    
+    return filtered;
 }
 
 void commandHandler::handle_delete(const std::vector<std::string>& args)

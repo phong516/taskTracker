@@ -10,9 +10,18 @@ json storage::load(void) const
         std::cerr << "Failed to open " << p_filepath;
         return json {};
     }
+    
+    if (file.tellg() == 0 && file.peek() == std::ifstream::traits_type::eof())
+    {
+        std::cout << "file is empty, so start a new life\n";
+        file.close();
+        return json {};
+    }
+
     if (!json::accept(file))
     {
-        throw std::runtime_error("json file is invalid " + p_filepath);
+        std::cerr << "json file is invalid " << p_filepath << std::endl;
+        file.close();
         return json {};
     }
     else
@@ -22,20 +31,8 @@ json storage::load(void) const
     }
     json loadJson {json::parse(file)};
     file.close();
+    std::cout << p_json.dump(DEFAULT_INDENT);
     return loadJson;
-}
-
-bool storage::save(void)
-{
-    std::ofstream file(p_filepath, std::ios::trunc);
-    if (!file.is_open())
-    {
-        std::cerr << "Failed to open " << p_filepath;
-        return false;
-    }
-    file << p_json.dump(DEFAULT_INDENT);
-    file.close();
-    return true;
 }
 
 bool storage::save(json input)
@@ -46,7 +43,14 @@ bool storage::save(json input)
         std::cerr << "Failed to open " << p_filepath << std::endl;
         return false;
     }
-    file << input.dump(DEFAULT_INDENT);
+    if (!input.empty())
+    {
+        file << input.dump(DEFAULT_INDENT);
+    }
+    else
+    {
+        std::cout << "file is empty\n";
+    }
     file.close();
     return true;
 }
@@ -61,7 +65,7 @@ bool storage::init(void)
     if (!exists())
     {
         createDir();
-        save();
+        save(json());
     }
     return true;
 }
@@ -78,44 +82,4 @@ bool storage::createDir(void)
         return false;
     }
     return true;
-}
-
-bool storage::update(const std::string& id, const std::string& field, const std::string& content)
-{
-    if (!p_json["tasks"].contains(id))
-    {
-        std::cerr << "ID " + id << " not exists\n";
-        return false;
-    }
-    p_json["tasks"][id][field] = content;
-    return true;
-}
-
-bool storage::add(const std::string& desc)
-{
-    int nextID = p_json["next_id"];
-    json newJson {
-    {
-        {"desc", desc},
-        {"status", "in-progress"}
-    }};
-    p_json["tasks"][std::to_string(nextID)] = newJson;
-    p_json["next_id"] = ++nextID;
-    return true;
-}
-
-bool storage::remove(const std::string& id)
-{
-    p_json["tasks"].erase(id);
-    return true;
-}
-
-std::vector<json> storage::list(void) const
-{
-    std::vector<json> taskList {};
-    for (auto task: p_json["tasks"])
-    {
-        taskList.push_back(task);
-    }
-    return taskList;
 }
