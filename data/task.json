@@ -1,13 +1,11 @@
 {
-  "next_id": 4,
+  "next_id": 1,
   "tasks": {
-    "1": {
-      "desc": "remove the trash bin",
-      "status": "in-progress"
-    },
-    "2": {
-      "desc": "description 2",
-      "status": "done"
+    "0": {
+      "createdAt": "1767839096",
+      "description": "clean",
+      "status": "in-progress",
+      "updatedAt": "1767839096"
     }
   }
 }

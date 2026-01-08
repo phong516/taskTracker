@@ -7,7 +7,7 @@
 class commandHandler
 {
 private:
-    taskManager p_manager {};
+    taskManager p_manager;
     taskView p_view {};
 
     void handle_add(const std::vector<std::string>& args);

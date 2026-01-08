@@ -1,4 +1,4 @@
-#include "taskmanager.h"
+#include "model/taskmanager.h"
 
 taskManager::taskManager(const std::string& filepath): p_storage(filepath)
 {
@@ -31,21 +31,20 @@ void taskManager::load_tasks_from_json(const json& inputJson)
     {
         return;
     }
-    Task task;
     if (inputJson.contains("next_id"))
     {
         p_nextID = inputJson["next_id"];
     }
     if (inputJson.contains("tasks"))
     {
-        for (const auto& [id, task]: inputJson["tasks"].items())
+        for (const auto& [id, input_task]: inputJson["tasks"].items())
         {
             Task task {};
             task.id = std::stoi(id);
-            task.description = inputJson.value("description", "");
-            task.status = inputJson.value("status", "");
-            task.createdAt = inputJson.value("createdAt", std::time(nullptr));
-            task.updatedAt = inputJson.value("updatedAt", std::time(nullptr));
+            task.description = input_task.value("description", "");
+            task.status = input_task.value("status", "");
+            task.createdAt = input_task.value("createdAt", std::time(nullptr));
+            task.updatedAt = input_task.value("updatedAt", std::time(nullptr));
             
             p_tasks[task.id] = task;
         }
@@ -85,6 +84,22 @@ bool taskManager::update_task(int id, const Task& task)
     }
     p_tasks[id] = task;
     return true;
+}
+
+std::vector<Task> taskManager::list_task(const std::string& status_filter)
+{
+    std::vector<Task> tasks {};
+    for (const auto& [id, task]: p_tasks)
+    {
+        if (!status_filter.empty() && status_filter == task.status)
+        {
+            tasks.push_back(task);
+            std::cout << task.id << std::endl;
+            continue;
+        }
+        tasks.push_back(task);
+    }
+    return tasks;
 }
 
 // tasks -> json -> save

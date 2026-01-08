@@ -46,7 +46,7 @@ bool storage::save(json input)
         std::cerr << "Failed to open " << p_filepath << std::endl;
         return false;
     }
-    file << input.dump();
+    file << input.dump(DEFAULT_INDENT);
     file.close();
     return true;
 }
