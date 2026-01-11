@@ -10,7 +10,6 @@ class storage
 {
     private:
         std::string p_filepath {};
-        json p_json {};
 
         bool exists(void) const;
         bool createDir(void);

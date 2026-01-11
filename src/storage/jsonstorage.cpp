@@ -8,30 +8,29 @@ json storage::load(void) const
     if (!file.is_open())
     {
         std::cerr << "Failed to open " << p_filepath;
-        return json {};
+        return json();
     }
     
     if (file.tellg() == 0 && file.peek() == std::ifstream::traits_type::eof())
     {
         std::cout << "file is empty, so start a new life\n";
         file.close();
-        return json {};
+        return json();
     }
 
     if (!json::accept(file))
     {
         std::cerr << "json file is invalid " << p_filepath << std::endl;
         file.close();
-        return json {};
+        return json();
     }
     else
     {
         file.clear();
         file.seekg(0, std::ios::beg);
     }
-    json loadJson {json::parse(file)};
+    json loadJson = json::parse(file);
     file.close();
-    std::cout << p_json.dump(DEFAULT_INDENT);
     return loadJson;
 }
 
@@ -78,7 +77,7 @@ bool storage::createDir(void)
     }
     catch (std::filesystem::filesystem_error const& ex)
     {
-        throw std::runtime_error(ex.what());
+        std::cerr << ex.what();
         return false;
     }
     return true;
