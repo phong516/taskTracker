@@ -1,0 +1,29 @@
+{
+  "next_id": 4,
+  "tasks": {
+    "0": {
+      "createdAt": 1768127041,
+      "description": "clean",
+      "status": "done",
+      "updatedAt": 1768127041
+    },
+    "1": {
+      "createdAt": 1768127044,
+      "description": "update",
+      "status": "in-progress",
+      "updatedAt": 1768127044
+    },
+    "2": {
+      "createdAt": 1768127114,
+      "description": "remove",
+      "status": "done",
+      "updatedAt": 1768127114
+    },
+    "3": {
+      "createdAt": 1768127120,
+      "description": "cook",
+      "status": "in-progress",
+      "updatedAt": 1768127120
+    }
+  }
+}

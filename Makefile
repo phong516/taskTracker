@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Werror -Weffc++ -Wextra -Wconversion -Wsign-conversion -pedantic-errors -Isrc -Isrc/model -Isrc/view -Isrc/controller -Isrc/misc
+CXXFLAGS = -std=c++17 -Wall -Werror -Weffc++ -Wextra -Wconversion -Wsign-conversion -pedantic-errors -Isrc -Iinclude
 ifdef DEBUG
 	CXXFLAGS += -ggdb
 else
@@ -13,7 +13,7 @@ TARGET = tasktracker
 $(TARGET): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-%.0: %.cpp
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:

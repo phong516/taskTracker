@@ -1,9 +1,21 @@
 #pragma once
-
-#include <iostream>
-
+#include "storage/jsonstorage.h"
+#include "model/task.h"
 class taskManager
 {
-public:
-    taskManager(void) {}
+    private:
+        std::map<int, Task> p_tasks {};
+        int p_nextID {0};
+        storage p_storage {}; 
+        json task_to_json(void);
+        void load_tasks_from_json(const json& inputJson); 
+    public:
+        taskManager(const std::string& filepath);
+        int add_task(const std::string& desc);
+        bool delete_task(int id);
+        bool update_task(int id, const Task& task);
+        bool update_desc(int id, const std::string& desc);
+        bool update_status(int id, const std::string& status);
+        std::vector<Task> list_task(void);
+        bool save(void);
 };
