@@ -63,6 +63,7 @@ void commandHandler::handle_delete(const std::vector<std::string>& args)
     }
     int id = std::stoi(args[0]);
     p_manager.delete_task(id);
+    std::cout << "Task " << id << " is deleted successfully!\n";
     return;
 }
 
@@ -74,17 +75,16 @@ void commandHandler::handle_update(const std::vector<std::string>& args)
         std::cout << "`tasktracker help` for usage\n";
         return;
     }
-
-    Task task {};
+    int id {std::stoi(args[0])};
     if (has_option(args, "--desc"))
     {
-        task.description = get_option_value(args, "--desc");
+        p_manager.update_desc(id, get_option_value(args, "--desc"));
     }
     if (has_option(args, "--status"))
     {
-        task.status = get_option_value(args, "--status");
+        p_manager.update_status(id, get_option_value(args, "--status"));
     }
-    
+    std::cout << "Updated Task " << id << " successfully\n";
     return;
 }
 

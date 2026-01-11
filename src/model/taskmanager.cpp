@@ -93,6 +93,31 @@ bool taskManager::update_task(int id, const Task& task)
         return false;
     }
     p_tasks[id] = task;
+    save();
+    return true;
+}
+
+bool taskManager::update_desc(int id, const std::string& desc)
+{
+    if (p_tasks.count(id) == 0)
+    {
+        std::cerr << "Task #" << id << " does not exist\n";
+        return false;
+    }
+    p_tasks[id].description = desc;
+    save();
+    return true;
+}
+
+bool taskManager::update_status(int id, const std::string& status)
+{
+    if (p_tasks.count(id) == 0)
+    {
+        std::cerr << "Task #" << id << " does not exist\n";
+        return false;
+    }
+    p_tasks[id].status = status;
+    save();
     return true;
 }
 

@@ -14,6 +14,8 @@ class taskManager
         int add_task(const std::string& desc);
         bool delete_task(int id);
         bool update_task(int id, const Task& task);
+        bool update_desc(int id, const std::string& desc);
+        bool update_status(int id, const std::string& status);
         std::vector<Task> list_task(void);
         bool save(void);
 };

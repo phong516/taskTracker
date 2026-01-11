@@ -13,7 +13,7 @@ json storage::load(void) const
     
     if (file.tellg() == 0 && file.peek() == std::ifstream::traits_type::eof())
     {
-        std::cout << "file is empty, so start a new life\n";
+        std::cout << "file is empty\n";
         file.close();
         return json();
     }
@@ -45,10 +45,6 @@ bool storage::save(json input)
     if (!input.empty())
     {
         file << input.dump(DEFAULT_INDENT);
-    }
-    else
-    {
-        std::cout << "file is empty\n";
     }
     file.close();
     return true;
